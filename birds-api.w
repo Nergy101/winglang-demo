@@ -14,7 +14,7 @@ let db = new ex.Table(
 );
 
 let clientIdSecret = new cloud.Secret(
-  name: "client-id"
+  name: "clientId"
 );
 
 let addBird = new cloud.Function(inflight (payload: str): str => {
@@ -71,17 +71,15 @@ api.get("/birds/{id}", inflight (request: cloud.ApiRequest): cloud.ApiResponse =
 });
 
 api.post("/birds", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
-  let clientId = clientIdSecret.value();
-    log(clientId);
 
-   if let body = request.body {
-    let createdBirdId = addBird.invoke(body);
+  if let body = request.body {
+  let createdBirdId = addBird.invoke(body);
 
-    return cloud.ApiResponse {
-      status: 201,
-      body: createdBirdId
-    };
-   }
+  return cloud.ApiResponse {
+    status: 201,
+    body: createdBirdId
+  };
+  }
 });
 
 
@@ -97,6 +95,16 @@ api.delete("/birds/{id}", inflight (request: cloud.ApiRequest): cloud.ApiRespons
     };
 });
 
+api.get("/config", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+  log("testing secret");
+  let clientId = clientIdSecret.value();
+  log(clientId);
+
+    return cloud.ApiResponse {
+      status: 200,
+      body: clientId
+    };
+});
 
 let website = new cloud.Website(path: "./public");
 
