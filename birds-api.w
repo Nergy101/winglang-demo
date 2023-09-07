@@ -91,3 +91,9 @@ api.delete("/birds/{id}", inflight (request: cloud.ApiRequest): cloud.ApiRespons
     };
 });
 
+
+let website = new cloud.Website(path: "./public");
+
+website.addJson("config.json", Json {
+  "apiUrl": api.url
+});
