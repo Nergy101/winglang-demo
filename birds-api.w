@@ -13,6 +13,9 @@ let db = new ex.Table(
   }
 );
 
+let clientIdSecret = new cloud.Secret(
+  name: "client-id"
+);
 
 let addBird = new cloud.Function(inflight (payload: str): str => {
     let data = Json.parse(payload);
@@ -68,6 +71,9 @@ api.get("/birds/{id}", inflight (request: cloud.ApiRequest): cloud.ApiResponse =
 });
 
 api.post("/birds", inflight (request: cloud.ApiRequest): cloud.ApiResponse => {
+  let clientId = clientIdSecret.value();
+    log(clientId);
+
    if let body = request.body {
     let createdBirdId = addBird.invoke(body);
 
@@ -95,5 +101,7 @@ api.delete("/birds/{id}", inflight (request: cloud.ApiRequest): cloud.ApiRespons
 let website = new cloud.Website(path: "./public");
 
 website.addJson("config.json", Json {
-  "apiUrl": api.url
+  "apiUrl": api.url,
+  "title": "Wing-Birds"
 });
+

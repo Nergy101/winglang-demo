@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchSettings(folderPath)
     .then((settings) => {
       console.log(settings);
+
+      document.title = settings.title;
+
     })
     .catch((error) => {
       console.error("Error fetching folder contents:", error);
